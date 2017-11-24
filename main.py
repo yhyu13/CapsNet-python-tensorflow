@@ -37,7 +37,7 @@ def train(flags=FLAGS, hps=HPS):
     # mlp = Net(flags, hps, model_type='mlp')
 
     for g in range(flags.global_epoch):
-        with timer('Global epoch #{g}'):
+        with timer(f'Global epoch #{g}'):
             logger.debug(f'Start global epoch {g}')
             CapsNet.train(porportion=0.01)
             CapsNet.test(porportion=0.1)
