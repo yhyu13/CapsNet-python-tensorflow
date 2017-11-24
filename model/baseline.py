@@ -1,0 +1,2 @@
+class MLP(object):
+    pass
