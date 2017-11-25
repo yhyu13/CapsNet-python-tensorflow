@@ -80,3 +80,7 @@ TDB
 ## Conclusion
 
 TBD
+
+## Interpretation
+
+[如何看待Hinton的论文《Dynamic Routing Between Capsules》？ - SIY.Z的回答 - 知乎](https://www.zhihu.com/question/67287444/answer/251241736)
