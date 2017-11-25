@@ -50,9 +50,11 @@ See training result:
 
 ```tensorboard --logdir=test_log/ --host=0.0.0.0 --port=6060```
 
-![](/figure/Nov23_1.png)
+Training result show between CapsNet (paper version) and CNN baseline (paper version). The cost of CapsNet is marginal loss plus l2 regularization. The cost of CNN baseline is the sum of cross entropy and l2 loss. Notice the CE loss is more sensitive than the marginal loss. Tensor neuron (aka. Capsule)'s loss function is more stable (?), it also support existence of multiple classes (<-one of the purpose of this paper). The CapsNet trains 3 times faster than the CNN baseline, partially due to a simpler implementation that takes advantage of TensorFlow reshape mechanism.
 
-![](/figure/Nov23_2.png)
+![](/figure/Nov24train.png)
+
+![](/figure/Nov24test.png)
 
 ### CIFAR10
 
@@ -62,7 +64,6 @@ TBD
 
 ***Reconstruction layer will come soon***
 
-![](https://raw.githubusercontent.com/XifengGuo/CapsNet-Keras/master/result/model.png)
 
 Credit: XifengGuo
 
@@ -74,13 +75,16 @@ According to Paper:
 > One very special property is the existence of the instantiated entity in the image. An obvious way to represent existence is by using a separate logistic unit whose output is the probability that the entity exists. ***In this paper we explore an interesting alternative which is to use the overall length of the vector of instantiation parameters to represent the existence of the entity and to force the orientation
 of the vector to represent the properties of the entity1. We ensure that the length of the vector output of a capsule cannot exceed 1 by applying a non-linearity that leaves the orientation of the vector unchanged but scales down its magnitude.***
 
-TDB
+As the follow up paper--[MATRIX CAPSULES WITH EM ROUTING](https://openreview.net/pdf?id=HJWLfGWRb)--states, the CapsNet has the following defects:
 
+>1. It uses the length of the pose vector to represent the probability that the entity represented by a capsule is present. To keep the length less than 1 requires an unprincipled non-linearity that prevents there from being any sensible objective function that is minimized by the iterative routing procedure.
+2. It uses the cosine of the angle between two pose vectors to measure their agreement. Unlike the log variance of a Gaussian cluster, the cosine is not good at distinguishing between quite good agreement and very good agreement.
+3. It uses a vector of length n rather than a matrix with n elements to represent a pose, so its transformation matrices have n2 parameters rather than just n.
 
 ## Conclusion
 
 TBD
 
-## Interpretation
+## Concept Explanation
 
-[如何看待Hinton的论文《Dynamic Routing Between Capsules》？ - SIY.Z的回答 - 知乎](https://www.zhihu.com/question/67287444/answer/251241736)
+[(Chinese) 如何看待Hinton的论文《Dynamic Routing Between Capsules》？ - SIY.Z的回答 - 知乎](https://www.zhihu.com/question/67287444/answer/251241736)
