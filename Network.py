@@ -1,5 +1,5 @@
 from model.capsnet_model import CapsNet
-from model.baseline import MLP
+from model.cnn_baseline import CNNBaseline
 
 import tensorflow as tf
 import numpy as np
@@ -17,7 +17,7 @@ logger = daiquiri.getLogger(__name__)
 
 class Net(object):
 
-    def __init__(self, flags, hps, model_type: str):
+    def __init__(self, flags, hps):
 
         self.num_classes = flags.n_classes
         self.img_row = flags.n_img_row
@@ -34,6 +34,7 @@ class Net(object):
         self.sess = tf.Session(config=config, graph=g)
 
         with g.as_default():
+            tf.set_random_seed(1234)
             self.imgs = tf.placeholder(tf.float32,
                                        shape=[self.num_batch if flags.MODE == 'train' else None,
                                               self.img_row, self.img_col, self.img_channels])
@@ -41,8 +42,8 @@ class Net(object):
                                          shape=[self.num_batch if flags.MODE == 'train' else None,
                                                 self.num_classes])
             models = {'cap': lambda: CapsNet(hps, self.imgs, self.labels),
-                      'mlp': lambda: MLP(hps, self.imgs, self.labels)}
-            self.model = models[model_type]()
+                      'cnn': lambda: CNNBaseline(hps, self.imgs, self.labels)}
+            self.model = models[flags.model]()
             logger.debug("Building Model...")
 
             self.model.build_graph()
@@ -110,7 +111,7 @@ class Net(object):
                 global_step = self.sess.run(self.model.global_step)
                 self.train_writer.add_summary(summary, global_step)
                 self.sess.run(self.model.increase_global_step)
-                if i % 5 == 0:
+                if i % 2 == 0:
                     logger.debug(
                         f'Train step {i} | Loss: {l:.3f} | Accuracy: {acc:.3f} | Global step: {global_step} | Learning rate: {lrn_rate}')
 
@@ -118,6 +119,7 @@ class Net(object):
         logger.info('Evaluate model...')
         num_iter = int(1000 * porportion // self.num_batch) + 1
         logger.info(f'1 Epoch training iteration will be: {num_iter}')
+        t_l, t_acc = 0, 0
         for i in range(num_iter):
             batch = get_batch(train=False, batch_size=self.num_batch)
 
@@ -136,6 +138,9 @@ class Net(object):
             else:
                 global_step = self.sess.run(self.model.global_step)
                 self.test_writer.add_summary(summary, global_step)
+                t_l += l
+                t_acc += acc
                 if i % 1 == 0:
                     logger.debug(
                         f'Test step {i} | Loss: {l:.3f} | Accuracy: {acc:.3f} | Global step: {global_step}')
+        return t_l / num_iter, t_acc / num_iter

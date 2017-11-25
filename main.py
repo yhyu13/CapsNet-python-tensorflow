@@ -33,16 +33,16 @@ def timer(message: str):
 
 def train(flags=FLAGS, hps=HPS):
     from Network import Net
-    CapsNet = Net(flags, hps, model_type='cap')
-    # mlp = Net(flags, hps, model_type='mlp')
+    net = Net(flags, hps)
 
     for g in range(flags.global_epoch):
         with timer(f'Global epoch #{g}'):
             logger.debug(f'Start global epoch {g}')
-            CapsNet.train(porportion=0.01)
-            CapsNet.test(porportion=0.1)
+            net.train(porportion=0.01)
+            l, acc = net.test(porportion=0.1)
             logger.debug(f'Finish global epoch {g}')
 
+    net.save_model(name=f'{l:.4f}-{acc:.4f}')
     logger.info('All done')
 
 
