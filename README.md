@@ -58,8 +58,11 @@ Training result show between CapsNet (Orange) and CNN baseline (Blue). The cost 
 
 Figures below show a side by side comparison between CapsNet + Recon (Red) and CapsNet (Orange).
 
+**Train**
 ![](/figure/Nov25train_recon.png)
 
+
+**Test**
 ![](/figure/Nov25test_recon.png)
 
 #### Image reconstruction as a regualarizer
@@ -82,8 +85,8 @@ of the vector to represent the properties of the entity1. We ensure that the len
 As the follow up paper--[MATRIX CAPSULES WITH EM ROUTING](https://openreview.net/pdf?id=HJWLfGWRb)--states, the CapsNet has the following defects:
 
 >1. It uses the length of the pose vector to represent the probability that the entity represented by a capsule is present. To keep the length less than 1 requires an unprincipled non-linearity that prevents there from being any sensible objective function that is minimized by the iterative routing procedure.
-2. It uses the cosine of the angle between two pose vectors to measure their agreement. Unlike the log variance of a Gaussian cluster, the cosine is not good at distinguishing between quite good agreement and very good agreement.
-3. It uses a vector of length n rather than a matrix with n elements to represent a pose, so its transformation matrices have n2 parameters rather than just n.
+>2. It uses the cosine of the angle between two pose vectors to measure their agreement. Unlike the log variance of a Gaussian cluster, the cosine is not good at distinguishing between quite good agreement and very good agreement.
+>3. It uses a vector of length n rather than a matrix with n elements to represent a pose, so its transformation matrices have n2 parameters rather than just n.
 
 ## Conclusion
 
