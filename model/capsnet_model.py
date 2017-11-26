@@ -188,8 +188,23 @@ class CapsNet(Baseline):
             params_shape = [self.hps.num_classes, num_capsules, filters[3], capsules_dims]
             cigits = self._capsule_layer(x, params_shape=params_shape,
                                          num_routing=self.hps.num_routing, name='capsules_final')
+            tf.logging.info(f'cigits shape {cigits.get_shape()}')
             # Compute length of each [None,output_num_capsule,output_dim_capsule]
             y_pred = tf.sqrt(tf.reduce_sum(tf.square(cigits), 2))
+
+        with tf.variable_scope('masking'):
+            self.masked_cigits = tf.reduce_sum(tf.multiply(
+                cigits, tf.expand_dims(self.labels, 2)), axis=1)
+            tf.logging.info(f'masked cigits shape {self.masked_cigits.get_shape()}')
+            assert self.masked_cigits.get_shape()[1:] == [16]
+
+        with tf.variable_scope('decoder'):
+            x_recon = self._fully_connected(self.masked_cigits, 512, name='fc1')
+            x_recon = self._fully_connected(x_recon, 1024, name='fc2')
+            x_recon = self._fully_connected(x_recon, 28**2, name='fc_final')
+            x_recon = tf.reshape(x_recon, [-1, 28, 28, 1])
+            self.recon_images = tf.sigmoid(x_recon)
+            tf.logging.info(f'reconstructed image shape {x_recon.get_shape()}')
 
         with tf.variable_scope('costs'):
             """Margin loss for Eq.(4). When y_true[i, :] contains not just one `1`, this loss should work too. Not test it."""
@@ -199,11 +214,15 @@ class CapsNet(Baseline):
             m_minus = self.hps.m_minus_margin_loss  # 0.1
             L = y_true * tf.square(tf.maximum(0., m_plus - y_pred)) + \
                 lbd * (1 - y_true) * tf.square(tf.maximum(0., y_pred - m_minus))
-            ce = tf.reduce_mean(tf.reduce_sum(L, 1), name='prediction_loss')
+            L = tf.reduce_mean(tf.reduce_sum(L, 1), name='prediction_loss')
 
-            cost = ce + self._decay()
+            recon_L = tf.losses.mean_squared_error(
+                labels=self.images, predictions=self.recon_images, weights=0.005 * 28**2)
+
+            cost = L + self._decay() + recon_L
             tf.summary.scalar(f'Total_loss', cost)
-            tf.summary.scalar(f'Prediction_loss', ce)
+            tf.summary.scalar(f'Prediction_loss', L)
+            tf.summary.scalar(f'Reconstruction_loss', recon_L)
 
         with tf.variable_scope('acc'):
             correct_prediction = tf.equal(

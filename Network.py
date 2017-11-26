@@ -10,6 +10,7 @@ import logging
 import daiquiri
 
 from dataset import get_batch
+from util import plot_imgs
 
 daiquiri.setup(level=logging.DEBUG)
 logger = daiquiri.getLogger(__name__)
@@ -25,6 +26,7 @@ class Net(object):
         self.img_channels = flags.n_img_channels
         self.num_batch = flags.n_batch
         self.load_model_path = flags.load_model_path
+        self.model = flags.model
 
         tf.reset_default_graph()
         g = tf.Graph()
@@ -85,8 +87,11 @@ class Net(object):
         self.saver.save(self.sess, f'./savedmodels/model-{name}.ckpt',
                         global_step=self.sess.run(self.model.global_step))
 
-    def predict(self, features):
-        pass
+    def reconstruct_img(self, features):
+        assert self.model == "cap"
+        feed_dict = {self.model.masked_cigits: [features]}
+        recon_imgs = self.sess.run([self.model.recon_images], feed_dict=feed_dict)
+        plot_imgs(recon_imgs)
 
     def train(self, porportion=0.25):
         logger.info('Train model...')

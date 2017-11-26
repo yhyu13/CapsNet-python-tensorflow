@@ -50,7 +50,7 @@ See training result:
 
 ```tensorboard --logdir=test_log/ --host=0.0.0.0 --port=6060```
 
-Training result show between CapsNet (paper version) and CNN baseline (paper version). The cost of CapsNet is marginal loss plus l2 regularization. The cost of CNN baseline is the sum of cross entropy and l2 loss. Notice the CE loss is more sensitive than the marginal loss. Tensor neuron (aka. Capsule)'s loss function is more stable (?), it also support existence of multiple classes (<-one of the purpose of this paper). The CapsNet trains 3 times faster than the CNN baseline, partially due to a simpler implementation that takes advantage of TensorFlow reshape mechanism.
+Training result show between CapsNet (Orange) and CNN baseline (Blue). The cost of CapsNet is marginal loss plus l2 regularization. The cost of CNN baseline is the sum of cross entropy and l2 loss. Notice the CE loss is more sensitive than the marginal loss. Tensor neuron (aka. Capsule)'s loss function is more stable (?), it also support existence of multiple classes (<-one of the purpose of this paper). The CapsNet trains 3 times faster than the CNN baseline, partially due to a simpler implementation that takes advantage of TensorFlow reshape mechanism.
 
 ![](/figure/Nov24train.png)
 
