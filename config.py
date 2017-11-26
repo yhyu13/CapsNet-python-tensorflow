@@ -15,7 +15,7 @@ parser.add_argument('--n_classes', type=int, default=10)
 parser.add_argument('--lr', type=float, default=1e-3)
 parser.add_argument('--model', default='cap')
 parser.add_argument('--dataset', dest='processed_dir', default='./MNIST_data')
-parser.add_argument('--load_model_path', dest='load_model_path', default='./savedmodels')
+parser.add_argument('--load_model_path', dest='load_model_path', default=None)  # './savedmodels'
 parser.add_argument('--mode', dest='MODE', default='train', help='among selfplay, gtp and train')
 
 FLAGS = parser.parse_args()

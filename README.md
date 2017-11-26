@@ -56,19 +56,23 @@ Training result show between CapsNet (Orange) and CNN baseline (Blue). The cost 
 
 ![](/figure/Nov24test.png)
 
+Figures below show a side by side comparison between CapsNet + Recon (Red) and CapsNet (Orange).
+
+![](/figure/Nov25train_recon.png)
+
+![](/figure/Nov25test_recon.png)
+
+#### Image reconstruction as a regualarizer
+
+![](/figure/recon_2.png)
+
+![](/figure/recon_unknow.png)
+
 ### CIFAR10
 
 TBD
 
-## Architecture
-
-***Reconstruction layer will come soon***
-
-
-Credit: XifengGuo
-
 ### Capsules
-
 
 According to Paper:
 

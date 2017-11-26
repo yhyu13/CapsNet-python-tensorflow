@@ -47,7 +47,13 @@ def train(flags=FLAGS, hps=HPS):
 
 
 def test(flags=FLAGS, hps=HPS):
-    pass
+    from Network import Net
+    import numpy as np
+    net = Net(flags, hps)
+    load_model_path = './savedmodels/model-0.2513-0.9609.ckpt-1000'
+    net.restore_model(load_model_path)
+    for i in range(10):
+        net.reconstruct_img(np.random.random(16))
 
 
 if __name__ == "__main__":

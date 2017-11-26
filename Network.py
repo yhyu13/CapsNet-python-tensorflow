@@ -26,7 +26,7 @@ class Net(object):
         self.img_channels = flags.n_img_channels
         self.num_batch = flags.n_batch
         self.load_model_path = flags.load_model_path
-        self.model = flags.model
+        self.model_name = flags.model
 
         tf.reset_default_graph()
         g = tf.Graph()
@@ -72,7 +72,7 @@ class Net(object):
         self.sess.run(list(init))
         logger.info('Done initializing variables')
 
-    def restore_model(self):
+    def restore_model(self, model_path=None):
         if self.load_model_path is not None:
             logger.debug('Loading Model...')
             try:
@@ -81,17 +81,24 @@ class Net(object):
                 logger.debug('Loading Model Succeeded...')
             except:
                 logger.debug('Loading Model Failed')
-                pass
+        elif model_path is not None:
+            try:
+                self.saver.restore(self.sess, model_path)
+                logger.debug('Loading Model Succeeded...')
+            except:
+                logger.debug('Loading Model Failed')
+        else:
+            logger.debug('No Model to load')
 
     def save_model(self, name):
         self.saver.save(self.sess, f'./savedmodels/model-{name}.ckpt',
                         global_step=self.sess.run(self.model.global_step))
 
     def reconstruct_img(self, features):
-        assert self.model == "cap"
+        assert self.model_name == "cap", "Assert model==cap in config.py"
         feed_dict = {self.model.masked_cigits: [features]}
         recon_imgs = self.sess.run([self.model.recon_images], feed_dict=feed_dict)
-        plot_imgs(recon_imgs)
+        plot_imgs(np.squeeze(recon_imgs[0], axis=(3,)))
 
     def train(self, porportion=0.25):
         logger.info('Train model...')
