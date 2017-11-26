@@ -193,10 +193,11 @@ class CapsNet(Baseline):
             y_pred = tf.sqrt(tf.reduce_sum(tf.square(cigits), 2))
 
         with tf.variable_scope('masking'):
-            self.masked_cigits = tf.reduce_sum(tf.multiply(
-                cigits, tf.expand_dims(self.labels, 2)), axis=1)
+            self.masked_cigits = masked_cigits = tf.multiply(cigits, tf.expand_dims(self.labels, 2))
+            # I believe there shouldn't be a reduce sum as it will eliminate the info about what digit it is
+            #self.masked_cigits = tf.reduce_sum(masked_cigits, axis=1)
             tf.logging.info(f'masked cigits shape {self.masked_cigits.get_shape()}')
-            assert self.masked_cigits.get_shape()[1:] == [16]
+            assert self.masked_cigits.get_shape()[1:] == [10, 16]
 
         with tf.variable_scope('decoder'):
             x_recon = self._fully_connected(self.masked_cigits, 512, name='fc1')
