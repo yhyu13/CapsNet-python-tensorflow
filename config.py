@@ -25,7 +25,7 @@ HParams = namedtuple('HParams',
                      'batch_size, num_classes, min_lrn_rate, lrn_rate, decay_step, '
                      'filters, strides, cnn_kernel_size, padding, '
                      'lambda_margin_loss,m_plus_margin_loss,m_minus_margin_loss, '
-                     'num_routing, standard, '
+                     'num_routing, standard, label_masking, '
                      'weight_decay_rate, relu_leakiness, optimizer, temperature, global_norm, ')
 
 HPS = HParams(batch_size=FLAGS.n_batch,
@@ -42,6 +42,7 @@ HPS = HParams(batch_size=FLAGS.n_batch,
               m_minus_margin_loss=0.1,
               num_routing=3,
               standard=True,
+              label_masking=True,
               weight_decay_rate=1e-4,
               relu_leakiness=0.0,
               optimizer='adam',
