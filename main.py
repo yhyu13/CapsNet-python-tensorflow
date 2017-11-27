@@ -53,7 +53,10 @@ def test(flags=FLAGS, hps=HPS):
     load_model_path = './savedmodels/model-0.2513-0.9609.ckpt-1000'
     net.restore_model(load_model_path)
     for i in range(10):
-        net.reconstruct_img(np.random.random(16))
+        masked_cigits = np.zeros((10, 16))
+        digit = np.random.randint(10)
+        masked_cigits[digit] = np.random.random(16)
+        net.reconstruct_img(masked_cigits)
 
 
 if __name__ == "__main__":
