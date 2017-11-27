@@ -94,4 +94,6 @@ TBD
 
 ## Concept Explanation
 
-[(Chinese) 如何看待Hinton的论文《Dynamic Routing Between Capsules》？ - SIY.Z的回答 - 知乎](https://www.zhihu.com/question/67287444/answer/251241736)
+Kendrick Tan :[(English) Capsule Networks Explained](https://kndrck.co/posts/capsule_networks_explained/)
+
+SIY.Z: [(Chinese) 如何看待Hinton的论文《Dynamic Routing Between Capsules》？ - SIY.Z的回答 - 知乎](https://www.zhihu.com/question/67287444/answer/251241736)
