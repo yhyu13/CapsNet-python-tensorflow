@@ -10,6 +10,9 @@ This is python TensorFlow implementation of [Dynamic Routing Between Capsules](h
 ```python3.6```
 ```pip install -r requirment.txt```
 
+## How to use
+
+```python main.py --mode=train --model=cap```
 
 ## Other Implementations
 
